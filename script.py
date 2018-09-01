@@ -2,8 +2,8 @@
 
 import requests
 import json
-
-#import twitter
+import os
+from requests_oauthlib import OAuth1Session
 
 
 def getSchedule():
@@ -49,3 +49,16 @@ with open('timer.txt', 'r+') as file:
         overwrite(file, timer - 1)
 
 print(tweet)
+
+twitter = OAuth1Session(
+    os.environ["CONSUMER_KEY"], os.environ["CONSUMER_SECRET"],
+    os.environ["ACCESS_TOKEN_KEY"], os.environ["ACCESS_TOKEN_SECRET"])
+
+twparams = {"status": tweet}
+req = twitter.post(
+    "https://api.twitter.com/1.1/statuses/update.json", params=twparams)
+
+if req.status_code == 200:  #正常投稿出来た場合
+    print("Success.")
+else:  #正常投稿出来なかった場合
+    print("Failed. : %d" % req.status_code)
