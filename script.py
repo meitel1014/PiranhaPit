@@ -3,10 +3,13 @@
 import requests
 import json
 import os
+from time import sleep
+#from dotenv import load_dotenv
+from datetime import datetime
 from requests_oauthlib import OAuth1Session
 
 
-#timerには次回起動時にナワバリショッツルが何時間後に終わるかを記述してある
+#ナワバリショッツルが何時間後に終わるかを返す
 def getSchedule():
     url = 'https://spla2.yuu26.com/regular/schedule'
     headers = {'User-Agent': 'MEITEL twitter@meitel1014'}
@@ -23,33 +26,35 @@ def getSchedule():
     return -1
 
 
-def overwrite(file, timer):
-    file.seek(0)
-    file.write(str(timer))
-    file.truncate()
-
-
+#毎50分に起動する
 def tweet():
     tweet = ""
-    with open('timer.txt', 'r+') as file:
-        timer = int(file.read())
-        if timer == -1:
-            next = getSchedule()
-            if next == -1:
-                tweet = "おっ、ナワバリショッツルないやんけ。"
-            else:
-                tweet = "おっ、" + str(next - 2) + "時間後ナワバリショッツルやんけ。"
-                overwrite(file, next - 1)
-        elif timer == 0:
-            tweet = "おっ、ナワバリショッツル終わったやんけ。"
-            overwrite(file, getSchedule() - 1)
-        elif timer == 1 or timer == 2:
-            tweet = "おっ、ナワバリショッツルやんけ。"
-            overwrite(file, timer - 1)
-        else:
-            tweet = "おっ、" + str(timer - 2) + "時間後ナワバリショッツルやんけ。"
-            overwrite(file, timer - 1)
 
+    next = getSchedule()
+    if next == -1:
+        tweet = "おっ、ナワバリショッツルないやんけ。"
+    elif next == 2:
+        if datetime.now().hour % 2 == 0:
+            tweet = "おっ、ナワバリショッツル終わったやんけ。"
+        else:
+            tweet = "おっ、ナワバリショッツルやんけ。"
+    elif next == 4:
+        if datetime.now().hour % 2 == 0:
+            tweet = "おっ、ナワバリショッツルやんけ。"
+        else:
+            tweet = "おっ、" + 1 + "時間後ナワバリショッツルやんけ。"
+    else:
+        if datetime.now().hour % 2 == 0:
+            tweet = "おっ、" + str(next - 4) + "時間後ナワバリショッツルやんけ。"
+        else:
+            tweet = "おっ、" + str(next - 3) + "時間後ナワバリショッツルやんけ。"
+
+    sleep(600)
+
+    if next == -1:
+        nexnext = getSchedule()
+        if nexnext != -1:
+            tweet = "おっ、" + str(next - 2) + "時間後ナワバリショッツルやんけ。"
     print(tweet)
 
     twitter = OAuth1Session(
@@ -67,4 +72,6 @@ def tweet():
 
 
 if __name__ == "__main__":
+    #dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+    #load_dotenv(dotenv_path)
     tweet()
