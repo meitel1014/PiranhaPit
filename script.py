@@ -6,6 +6,7 @@ import os
 from requests_oauthlib import OAuth1Session
 
 
+#timerには次回起動時にナワバリショッツルが何時間後に終わるかを記述してある
 def getSchedule():
     url = 'https://spla2.yuu26.com/regular/schedule'
     headers = {'User-Agent': 'MEITEL twitter@meitel1014'}
@@ -14,10 +15,10 @@ def getSchedule():
 
     hour = 0
     for result in schedule["result"]:
+        hour += 2
         for map_data in result["maps_ex"]:
             if map_data["id"] == 17:
                 return hour
-        hour += 2
 
     return -1
 
