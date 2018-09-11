@@ -5,7 +5,7 @@ import json
 import os
 from time import sleep
 #from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timedelta
 from requests_oauthlib import OAuth1Session
 
 
@@ -49,7 +49,11 @@ def tweet():
         else:
             tweet = "おっ、" + str(next - 3) + "時間後ナワバリショッツルやんけ。"
 
-    sleep(600)
+    now = datetime.now()
+    nexthour = now + timedelta(hours=1)
+    tweettime = datetime(nexthour.year, nexthour.month, nexthour.day,
+                         nexthour.hour, 0, 0)
+    sleep((tweettime - now).total_seconds())
 
     if next == -1:
         nexnext = getSchedule()
