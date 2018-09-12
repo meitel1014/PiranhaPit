@@ -40,7 +40,7 @@ def tweet():
             tweet = "おっ、ナワバリショッツルやんけ。"
     elif next == 4:
         if datetime.now().hour % 2 == 0:
-            tweet = "おっ、ナワバリショッツルやんけ。"
+            tweet = "おっ、ナワバリショッツルやんけ。 "
         else:
             tweet = "おっ、" + 1 + "時間後ナワバリショッツルやんけ。"
     else:
@@ -49,16 +49,18 @@ def tweet():
         else:
             tweet = "おっ、" + str(next - 3) + "時間後ナワバリショッツルやんけ。"
 
-    now = datetime.now()
-    nexthour = now + timedelta(hours=1)
-    tweettime = datetime(nexthour.year, nexthour.month, nexthour.day,
-                         nexthour.hour, 0, 0)
-    sleep((tweettime - now).total_seconds())
-
     if next == -1:
+        sleep(600)
         nexnext = getSchedule()
         if nexnext != -1:
             tweet = "おっ、" + str(next - 2) + "時間後ナワバリショッツルやんけ。"
+    else:
+        now = datetime.now()
+        nexthour = now + timedelta(hours=1)
+        tweettime = datetime(nexthour.year, nexthour.month, nexthour.day,
+                             nexthour.hour, 0, 0)
+        sleep((tweettime - now).total_seconds())
+
     print(tweet)
 
     twitter = OAuth1Session(
