@@ -42,7 +42,7 @@ def tweet():
         if datetime.now().hour % 2 == 0:
             tweet = "おっ、ナワバリショッツルやんけ。 "
         else:
-            tweet = "おっ、" + 1 + "時間後ナワバリショッツルやんけ。"
+            tweet = "おっ、1時間後ナワバリショッツルやんけ。"
     else:
         if datetime.now().hour % 2 == 0:
             tweet = "おっ、" + str(next - 4) + "時間後ナワバリショッツルやんけ。"
